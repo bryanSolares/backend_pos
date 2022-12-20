@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    container_name: backend
+    restart: always
+    ports:
+      - 3999:3999
+    volumes:
+      - app_data:/app/data
+    networks:
+      - netword_pos
+    depends_on:
+      - database
+
+  database:
+    build:
+      context: .
+      dockerfile: database.dockerfile
+    container_name: database
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=POS
+    ports:
+      - 5432:5432
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    networks:
+      - netword_pos
+
+volumes:
+  pgdata: {}
+  app_data:
+
+networks:
+  netword_pos:
+    driver: bridge

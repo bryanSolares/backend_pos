@@ -11,7 +11,7 @@ services:
     ports:
       - 3999:3999
     volumes:
-      - app_data:/app/data
+      - ./:/app
     networks:
       - netword_pos
     depends_on:
@@ -36,7 +36,6 @@ services:
 
 volumes:
   pgdata: {}
-  app_data:
 
 networks:
   netword_pos:

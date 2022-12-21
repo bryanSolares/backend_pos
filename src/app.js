@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const { PORT } = require('./config/dotenv')
 const routes = require('./app/routes/index')
 
+const sequelize = require('./config/database.connect')
+
 const app = express()
 app.set('port', PORT)
 
@@ -16,8 +18,10 @@ app.use(morgan('dev'))
 
 app.use('/api', routes)
 
-app.listen(app.get('port'), () => {
+app.listen(app.get('port'), async () => {
   console.log('Server online')
+  console.log(`Server on port ${app.get('port')}`)
+  await sequelize.connectPostgresql()
 })
 
 module.exports = app

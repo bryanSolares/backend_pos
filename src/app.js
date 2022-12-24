@@ -22,6 +22,7 @@ app.listen(app.get('port'), async () => {
   console.log('Server online')
   console.log(`Server on port ${app.get('port')}`)
   await sequelize.connectPostgresql()
+  ///await sequelize.sequelize.sync({ force: true })
 })
 
 module.exports = app

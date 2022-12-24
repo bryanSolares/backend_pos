@@ -26,4 +26,4 @@ const connectPostgresql = async () => {
   }
 }
 
-module.exports = { connectPostgresql }
+module.exports = { sequelize, connectPostgresql }

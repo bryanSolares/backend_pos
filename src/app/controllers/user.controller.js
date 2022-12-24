@@ -5,12 +5,6 @@ const createUser = async (req, res) => {
   const userData = req.body
 
   try {
-    if (!userData || Object.entries(userData).length === 0) {
-      // TODO: Exception personalizada
-      return res.status(400).json({
-        message: 'Data user not found on request'
-      })
-    }
     const userExists = await userService.getUser(userData.cod_user)
     if (userExists) return res.status(400).json({ message: 'User already, please try new cod_user' })
     const passwordEncrypted = await encryptPassword(userData.password)

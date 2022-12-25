@@ -22,9 +22,6 @@ const updateUser = async (req, res) => {
   const userData = req.body
   const id = req.params.id
   try {
-    if (!userData || Object.keys(userData).length === 0 || !id) {
-      return res.status(400).json({ message: 'Data user not found on request or id not present' })
-    }
     const userExists = await userService.getUser(id)
     if (!userExists) return res.status(404).json({ message: 'User not found on database' })
     if (userData.password) {
@@ -43,7 +40,6 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const id = req.params.id
   try {
-    if (!id) return res.status(400).json({ message: 'CodUser not present on request' })
     const user = await userService.getUser(id)
     if (!user || Object.entries(user).length === 0 || user.deleted === true) {
       return res.status(404).json({ message: 'User not found on database' })
@@ -68,6 +64,7 @@ const getUser = async (req, res) => {
     res.status(400).json({ message: 'Error on search user', error: error })
   }
 }
+
 const getAllUsers = async (req, res) => {
   const { limit, page } = req.query
   try {
@@ -82,6 +79,7 @@ const getAllUsers = async (req, res) => {
     res.status(400).json({ message: 'Error on search all users', error: error })
   }
 }
+
 const uploadImage = (req, res) => {}
 
 module.exports = {

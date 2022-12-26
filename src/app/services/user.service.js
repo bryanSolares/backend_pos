@@ -39,11 +39,23 @@ const updateImage = async (id, url) => {
   return userModel.update({ image: url }, { where: { cod_user: id } })
 }
 
+const getImage = async (id) => {
+  return userModel.findByPk(id, { attributes: ['image'] })
+}
+
+const deleteImage = async (id) => {
+  const imageDefault = 'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
+  userModel.update({ image: imageDefault }, { where: { cod_user: id } })
+  return imageDefault
+}
+
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUser,
   getAllUsers,
-  updateImage
+  updateImage,
+  getImage,
+  deleteImage
 }

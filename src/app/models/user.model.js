@@ -11,7 +11,11 @@ const User = sequelize.define(
     email: { type: DataTypes.STRING, allowNull: false },
     status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     phone: DataTypes.STRING,
-    image: { type: DataTypes.STRING, allowNull: false, defaultValue: 'https://noting.com.gt' },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
+    },
     deleted: { type: DataTypes.BOOLEAN, defaultValue: false }
   },
   {

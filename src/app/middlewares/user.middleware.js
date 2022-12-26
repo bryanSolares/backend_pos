@@ -108,13 +108,26 @@ const deleteUser = checkSchema({
   }
 })
 
-const uploadImage = checkSchema({})
+const getImage = checkSchema({
+  id: {
+    in: ['params'],
+    errorMessage: 'Please enter cod_user of image'
+  }
+})
+
+const deleteImage = checkSchema({
+  id: {
+    in: ['params'],
+    errorMessage: 'Please enter cod_user of image'
+  }
+})
 
 module.exports = {
   newUser,
   updateUser,
   deleteUser,
-  uploadImage
+  getImage,
+  deleteImage
 }
 
 //TODO: Para validar modificaciones o eliminaciones = https://express-validator.github.io/docs/schema-validation.html

@@ -1,5 +1,7 @@
 const userService = require('../services/user.service')
 const { encryptPassword } = require('../utils/user.utils')
+const { optionsProfilePhotoUpload } = require('../../config/cloudinary')
+const uploadService = require('../services/upload.service')
 
 const createUser = async (req, res) => {
   const userData = req.body
@@ -80,10 +82,50 @@ const getAllUsers = async (req, res) => {
   }
 }
 
+const loadImageProfile = async (req, res) => {
+  const id = req.params.id
+  const { path } = req.file
+  try {
+    const userExists = await userService.getUser(id)
+    if (!userExists) return res.status(404).json({ message: 'User not found on database' })
+    const options = optionsProfilePhotoUpload(id)
+    const { secure_url } = await uploadService.uploadCloud(path, options)
+    await userService.updateImage(id, secure_url)
+    res.status(200).json({ message: 'Image saved successfully', url: secure_url })
+  } catch (error) {
+    res.status(500).json({ message: 'Error on upload image', error })
+  } finally {
+    uploadService.deleteResource(path)
+  }
+}
+
+const getImageProfile = async (req, res) => {
+  const id = req.params.id
+  try {
+    const { image } = await userService.getImage(id)
+    res.status(200).json({ message: '-', image })
+  } catch (error) {
+    res.status(500).json({ message: 'Error on get image', error })
+  }
+}
+
+const deleteImageProfile = async (req, res) => {
+  const id = req.params.id
+  try {
+    const image = await userService.deleteImage(id)
+    res.status(200).json({ message: 'Image deleted successfully', image })
+  } catch (error) {
+    res.status(500).json({ message: 'Error on delete image', error })
+  }
+}
+
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUser,
-  getAllUsers
+  getAllUsers,
+  loadImageProfile,
+  getImageProfile,
+  deleteImageProfile
 }

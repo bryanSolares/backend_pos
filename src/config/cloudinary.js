@@ -10,4 +10,12 @@ cloudinary.config({
   secure: true
 })
 
-module.exports = cloudinary
+const optionsProfilePhotoUpload = (id) => ({
+  use_filename: true,
+  unique_filename: true,
+  overwrite: true,
+  folder: 'profiles',
+  public_id: `profile_${id}`
+})
+
+module.exports = { cloudinary, optionsProfilePhotoUpload }

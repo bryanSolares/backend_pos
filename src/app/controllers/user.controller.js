@@ -80,13 +80,10 @@ const getAllUsers = async (req, res) => {
   }
 }
 
-const uploadImage = (req, res) => {}
-
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUser,
-  getAllUsers,
-  uploadImage
+  getAllUsers
 }

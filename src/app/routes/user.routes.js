@@ -14,6 +14,5 @@ router.patch('/:id', updateUser, validationHandle, UserController.updateUser)
 router.get('/:id', UserController.getUser)
 router.get('/', UserController.getAllUsers)
 router.delete('/:id', deleteUser, validationHandle, UserController.deleteUser)
-router.put('/:id', uploadImage, validationHandle, UserController.uploadImage)
 
 module.exports = router

@@ -75,7 +75,7 @@ const getAllUsers = async (req, res) => {
     }
 
     const dataUsers = await userService.getAllUsers(page, limit)
-    res.status(200).json({ message: '_', users: dataUsers })
+    res.status(200).json({ message: '_', data: dataUsers })
   } catch (error) {
     //TODO: Error personalizado
     res.status(400).json({ message: 'Error on search all users', error: error })
@@ -102,6 +102,8 @@ const loadImageProfile = async (req, res) => {
 const getImageProfile = async (req, res) => {
   const id = req.params.id
   try {
+    const userExists = await userService.getUser(id)
+    if (!userExists) return res.status(404).json({ message: 'User not found on database' })
     const { image } = await userService.getImage(id)
     res.status(200).json({ message: '-', image })
   } catch (error) {
@@ -112,6 +114,8 @@ const getImageProfile = async (req, res) => {
 const deleteImageProfile = async (req, res) => {
   const id = req.params.id
   try {
+    const userExists = await userService.getUser(id)
+    if (!userExists) return res.status(404).json({ message: 'User not found on database' })
     const image = await userService.deleteImage(id)
     res.status(200).json({ message: 'Image deleted successfully', image })
   } catch (error) {

@@ -18,11 +18,11 @@ app.use(morgan('dev'))
 
 app.use('/api', routes)
 
-app.listen(app.get('port'), async () => {
+const server = app.listen(app.get('port'), async () => {
   console.log('Server online')
   console.log(`Server on port ${app.get('port')}`)
   await sequelize.connectPostgresql()
   ///await sequelize.sequelize.sync({ force: true })
 })
 
-module.exports = app
+module.exports = { server, app }

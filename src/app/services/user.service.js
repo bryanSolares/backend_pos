@@ -49,6 +49,10 @@ const deleteImage = async (id) => {
   return imageDefault
 }
 
+const destroyUser = async (id) => {
+  return userModel.destroy({ where: { cod_user: id } })
+}
+
 module.exports = {
   createUser,
   updateUser,
@@ -57,5 +61,6 @@ module.exports = {
   getAllUsers,
   updateImage,
   getImage,
-  deleteImage
+  deleteImage,
+  destroyUser
 }

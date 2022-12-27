@@ -17,8 +17,8 @@ router.patch('/:id', updateUser, validationHandle, userController.updateUser)
 router.get('/:id', userController.getUser)
 router.get('/', userController.getAllUsers)
 router.delete('/:id', deleteUser, validationHandle, userController.deleteUser)
-router.post('/profile/:id', upload.single('profile'), imageValidate, validationHandle, userController.loadImageProfile)
-router.get('/profile/:id', getImage, validationHandle, userController.getImageProfile)
-router.delete('/profile/:id', deleteImage, validationHandle, userController.deleteImageProfile)
+router.post('/upload/:id', upload.single('profile'), imageValidate, validationHandle, userController.loadImageProfile)
+router.get('/upload/:id', getImage, validationHandle, userController.getImageProfile)
+router.delete('/upload/:id', deleteImage, validationHandle, userController.deleteImageProfile)
 
 module.exports = router

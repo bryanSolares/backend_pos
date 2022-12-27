@@ -1,11 +1,14 @@
 const userModel = require('../models/user.model')
 
+const excludeFields = ['password', 'deleted', 'createdAt', 'updatedAt']
+
 const createUser = async (user) => {
-  return userModel.create(user)
+  const { status, image, cod_user, name, lastname, email, phone } = await userModel.create(user, { raw: true })
+  return { status, image, cod_user, name, lastname, email, phone }
 }
 
 const getUser = async (id) => {
-  return userModel.findByPk(id, { attributes: { exclude: ['password', 'deleted'] } }, { deleted: false })
+  return userModel.findByPk(id, { attributes: { exclude: excludeFields } }, { deleted: false })
 }
 
 /**
@@ -21,7 +24,7 @@ const getAllUsers = async (page = 1, limit = 10) => {
     raw: true,
     limit,
     offset,
-    attributes: { exclude: ['password', 'deleted'] },
+    attributes: { exclude: excludeFields },
     order: [['cod_user', 'ASC']]
   })
   const totalPages = Math.ceil(count / limit)

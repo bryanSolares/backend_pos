@@ -11,6 +11,10 @@ const newUser = checkSchema({
     in: ['body'],
     exists: true,
     notEmpty: true,
+    isString: {
+      errorMessage: 'Password must be a string',
+      options: true
+    },
     isLength: { options: { min: 5 }, errorMessage: 'Password should be at least 5 chars long' },
     errorMessage: 'Please enter a password'
   },
@@ -37,7 +41,15 @@ const newUser = checkSchema({
     in: ['body'],
     optional: true,
     notEmpty: true,
-    errorMessage: 'Please enter a phone number'
+    errorMessage: 'Please enter a phone number',
+    isLength: {
+      errorMessage: 'Phone should be at least minimum 14 characters and maximum 14 characters',
+      options: { min: 14, max: 14 }
+    },
+    matches: {
+      options: /^\+502\s\d{4}\-\d{4}$/,
+      errorMessage: 'Phone should be format valid, pather +50X XXXX-XXXX'
+    }
   },
   image: {
     in: ['body'],
@@ -64,6 +76,10 @@ const updateUser = checkSchema({
     in: ['body'],
     optional: true,
     notEmpty: true,
+    isString: {
+      errorMessage: 'Password must be a string',
+      options: true
+    },
     isLength: { options: { min: 5 }, errorMessage: 'Password should be at least 5 chars long' },
     errorMessage: 'Please enter a password'
   },
@@ -90,7 +106,15 @@ const updateUser = checkSchema({
     in: ['body'],
     optional: true,
     notEmpty: true,
-    errorMessage: 'Please enter a phone number'
+    errorMessage: 'Please enter a phone number',
+    isLength: {
+      errorMessage: 'Phone should be at least minimum 14 characters and maximum 14 characters',
+      options: { min: 14, max: 14 }
+    },
+    matches: {
+      options: /^\+502\s\d{4}\-\d{4}$/,
+      errorMessage: 'Phone should be format valid, pather +50X XXXX-XXXX'
+    }
   },
   image: {
     not: true,
@@ -129,5 +153,3 @@ module.exports = {
   getImage,
   deleteImage
 }
-
-//TODO: Para validar modificaciones o eliminaciones = https://express-validator.github.io/docs/schema-validation.html

@@ -1,6 +1,6 @@
 const userModel = require('../models/user.model')
 
-const excludeFields = ['password', 'deleted', 'createdAt', 'updatedAt']
+const excludeFields = ['deleted', 'createdAt', 'updatedAt']
 
 const createUser = async (user) => {
   const { status, image, cod_user, name, lastname, email, phone } = await userModel.create(user, { raw: true })
@@ -8,15 +8,13 @@ const createUser = async (user) => {
 }
 
 const getUser = async (id) => {
-  return userModel.findByPk(id, { attributes: { exclude: excludeFields } }, { deleted: false })
+  return userModel.findOne({
+    where: { cod_user: id, deleted: false },
+    attributes: { exclude: excludeFields },
+    raw: true
+  })
 }
 
-/**
- *
- * @param {number} offset
- * @param {number} limit
- * @returns All Users include number of pages
- */
 const getAllUsers = async (page = 1, limit = 10) => {
   const offset = parseInt((page - 1) * limit)
   const { rows, count } = await userModel.findAndCountAll({

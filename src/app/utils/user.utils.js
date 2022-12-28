@@ -12,6 +12,11 @@ const encryptPassword = (password) => {
   })
 }
 
-const decodePassword = (password) => {}
+const comparePassword = (password, encryptedPassword) => {
+  return new Promise(async (resolve) => {
+    const result = await bcrypt.compare(password, encryptedPassword)
+    resolve(result)
+  })
+}
 
-module.exports = { encryptPassword, decodePassword }
+module.exports = { encryptPassword, comparePassword }

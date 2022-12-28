@@ -9,6 +9,7 @@ module.exports = {
   ENV: process.env.NODE_ENV,
   TOKEN_EXPIRATION: process.env.JWT_EXPIRATION,
   SECRET_KEY: process.env.JWT_SECRET_KEY,
+  JWT_ALGORITHM: process.env.JWT_ALGORITHM,
   POSTGRES_USER: process.env.POSTGRES_USER,
   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
   POSTGRES_DB: process.env.POSTGRES_DB,

@@ -1,6 +1,9 @@
 const path = require('path')
-
+const fs = require('fs')
 require('dotenv').config({ path: path.join(__dirname, '../../.env') })
+
+const privateKey = fs.readFileSync(path.join(__dirname, '../jwt/dev.key'), 'utf-8')
+const publicKey = fs.readFileSync(path.join(__dirname, '../jwt/dev.key.pub'), 'utf-8')
 
 module.exports = {
   PORT: process.env.PORT || 3000,
@@ -8,7 +11,8 @@ module.exports = {
   MONGO_DATABASE_NAME: process.env.DATABASE_NAME,
   ENV: process.env.NODE_ENV,
   TOKEN_EXPIRATION: process.env.JWT_EXPIRATION,
-  SECRET_KEY: process.env.JWT_SECRET_KEY,
+  JWT_PRIVATE_KEY: privateKey,
+  JWT_PUBLIC_KEY: publicKey,
   JWT_ALGORITHM: process.env.JWT_ALGORITHM,
   POSTGRES_USER: process.env.POSTGRES_USER,
   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,

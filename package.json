@@ -11,7 +11,7 @@
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\"",
     "prepare": "husky install",
     "changelog_prepare": "conventional-changelog -i CHANGLOG.md -s -r 0",
-    "test": "NODE_ENV=test jest --verbose --silent",
+    "test": "NODE_ENV=test jest --verbose --detectOpenHandles",
     "test:watch": "npm run test -- --watch"
   },
   "keywords": [],

@@ -9,9 +9,10 @@ const routes = require('./app/routes/index')
 
 const sequelize = require('./config/database.connect')
 
+let server
 const app = express()
+
 app.disable('x-powered-by')
-app.set('port', PORT)
 
 app.use(cors())
 app.use(helmet())
@@ -23,15 +24,35 @@ app.use(morgan('dev'))
 
 app.use('/api', routes)
 
-const startServer = () => {
-  app.listen(app.get('port'), async () => {
-    console.log('Server online')
-    console.log(`Server on port ${app.get('port')}`)
-    await sequelize.connectPostgresql()
-    ///await sequelize.sequelize.sync({ force: true })
+const listen = () => {
+  return new Promise((resolve) => {
+    server = app.listen(PORT, async () => {
+      console.log('Server online')
+      console.log(`Server on port ${PORT}`)
+      await sequelize.connectPostgresql()
+      //     ///await sequelize.sequelize.sync({ force: true })
+      resolve()
+    })
   })
 }
 
-const stopServer = () => {}
+const stop = () => {
+  return new Promise((resolve, reject) => {
+    if (server) {
+      server.close((error) => {
+        if (error) {
+          reject()
+          console.log('Error al cerrar servidor')
+        }
+      })
+    }
 
-module.exports = { app }
+    if (sequelize.sequelize) {
+      sequelize.sequelize.close()
+    }
+
+    resolve()
+  })
+}
+
+module.exports = { listen, stop, server, app }

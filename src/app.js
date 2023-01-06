@@ -30,7 +30,7 @@ const listen = () => {
       console.log('Server online')
       console.log(`Server on port ${PORT}`)
       await sequelize.connectPostgresql()
-      //     ///await sequelize.sequelize.sync({ force: true })
+      //await sequelize.sequelize.sync({ force: true })
       resolve()
     })
   })

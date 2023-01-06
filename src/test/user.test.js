@@ -150,9 +150,12 @@ describe('/API/USER -> CRUD de Usuarios', () => {
     expect(user.cod_user).toBe('bryan_solares')
   })
 })
+
 describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
   //TODO: solucionar por HandlerError personalizado
   test('Se espera un 400 por no enviar un archivo adjunto', async () => {
+    await destroyUser('bryan_solares')
+    await request(app).post('/api/user').send(dataNewUser).set('Authorization', data.token)
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')
       .set('Authorization', data.token)

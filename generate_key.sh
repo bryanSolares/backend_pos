@@ -1,2 +1,2 @@
-ssh-keygen -t rsa -b 4096 -m PEM -f private_key.key
-openssl rsa -in private_key.key -pubout -outform PEM -out public.key.pub
+ssh-keygen -t rsa -b 4096 -m PEM -f private.key
+openssl rsa -in private.key -pubout -outform PEM -out private.key.pub

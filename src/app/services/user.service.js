@@ -18,7 +18,7 @@ const getUser = async (id) => {
 const getAllUsers = async (page = 1, limit = 10) => {
   const offset = parseInt((page - 1) * limit)
   const { rows, count } = await userModel.findAndCountAll({
-    where: { status: true, deleted: false },
+    where: { deleted: false },
     raw: true,
     limit,
     offset,

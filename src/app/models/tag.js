@@ -7,7 +7,8 @@ const Tag = sequelize.define(
     cod_tag: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING },
-    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
+    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    deleted: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
   },
   { tableName: 'tag', indexes: [{ unique: true, fields: ['cod_tag'] }], freezeTableName: true }
 )

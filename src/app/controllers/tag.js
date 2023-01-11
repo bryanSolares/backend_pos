@@ -52,8 +52,8 @@ const getTag = async (req, res) => {
   const id = req.params.id
   try {
     const tagFinded = await tagService.getTag(id, ['deleted', 'createdAt', 'updatedAt'])
-    if (!tagFinded || tagFinded.deleted === true)
-      return res.status(400).json({ message: 'La categoría a eliminar no existe en base de datos' })
+    // if (!tagFinded || tagFinded.deleted === true)
+    //   return res.status(400).json({ message: 'La categoría a eliminar no existe en base de datos' })
 
     res.status(200).json({ message: '-', tag: tagFinded })
   } catch (error) {
@@ -65,10 +65,10 @@ const getTags = async (req, res) => {
   const { limit, page } = req.query
   try {
     if (limit < 1 || page < 1) {
-      return res.status(404).json({ message: 'The query limit or page is not valid' })
+      return res.status(400).json({ message: 'The query limit or page is not valid' })
     }
     const tags = await tagService.getTags(page, limit, ['deleted', 'createdAt', 'updatedAt'])
-    res.status(200).json({ message: '-', tags })
+    res.status(200).json({ message: '-', data: tags })
   } catch (error) {
     res.status(500).json({ message: 'Error on get all tags', err })
   }

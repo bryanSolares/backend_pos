@@ -63,7 +63,7 @@ const validationOfUpdate = checkSchema({
     in: ['body'],
     exists: true,
     notEmpty: true,
-    isString: { errorMessage: 'Name should be a string' },
+    isBoolean: { errorMessage: 'Status should be boolean' },
     errorMessage: 'Should provide value of this param'
   }
 })

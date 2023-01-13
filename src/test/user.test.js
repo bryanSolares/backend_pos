@@ -1,7 +1,6 @@
 const path = require('path')
 const request = require('supertest')
-const { app, data } = require('./helpers/helper')
-const { destroyUser } = require('../app/services/user.service')
+const { app, data, userService } = require('./helpers/helper')
 
 const dataNewUser = {
   cod_user: 'bryan_solares',
@@ -31,27 +30,36 @@ const dataUserForUpdate = {
   }
 }
 
-describe('/API/USER -> CRUD de Usuarios', () => {
+let token
+
+beforeAll(async () => {
+  const { body } = await request(app)
+    .post('/api/auth/login')
+    .send({ username: 'administrador', password: 'administrador' })
+  token = body.token
+})
+
+describe('USER ADMINISTRATION', () => {
   //TODO: Deberá devolver un json
   test('Se espera un 401 por intentar hacer una acción sin envíar token', async () => {
     await request(app).post('/api/user').send(dataNewUser).expect(401)
   })
 
   test('Se espera que la creación de un usuario sea exitosa con los parámetros correctos', async () => {
-    await destroyUser('bryan_solares')
+    console.log(data, '---')
     await request(app)
       .post('/api/user')
       .send(dataNewUser)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(201)
   })
 
-  test('Se espera recibir un error 400 al intentar crear un usuario con código de usuario ya existente en BD, acompañado de un mensaje "User already, please try new cod_user"', async () => {
+  test('Se espera recibir un error 400 al intentar crear un usuario con código de usuario ya existente en base de datos"', async () => {
     const response = await request(app)
       .post('/api/user')
       .send(dataNewUser)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(400)
     expect(response.body.message).toBe('User already, please try new cod_user')
@@ -62,7 +70,7 @@ describe('/API/USER -> CRUD de Usuarios', () => {
     const response = await request(app)
       .post('/api/user')
       .send(dataBadUser)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
     const errorOfPassword = response.body.errors.find((err) => err.param === 'password')
@@ -75,7 +83,7 @@ describe('/API/USER -> CRUD de Usuarios', () => {
     const response = await request(app)
       .patch(`/api/user/anywhere`)
       .send(dataUserForUpdate.data)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     expect(response.body.message).toEqual('User not found on database')
@@ -86,7 +94,7 @@ describe('/API/USER -> CRUD de Usuarios', () => {
     const response = await request(app)
       .patch(`/api/user/${dataUserForUpdate.cod_user}`)
       .send(dataBadUser)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
     const errorOfPassword = response.body.errors.find((err) => err.param === 'password')
@@ -97,14 +105,15 @@ describe('/API/USER -> CRUD de Usuarios', () => {
     await request(app)
       .patch(`/api/user/${dataUserForUpdate.cod_user}`)
       .send(dataUserForUpdate.data)
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
   })
+
   test('Se espera un 404 por tratar darle de baja a un usuario que no existe en base de datos', async () => {
     const response = await request(app)
       .delete('/api/user/anywhere')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     expect(response.body.message).toEqual('User not found on database')
@@ -113,7 +122,7 @@ describe('/API/USER -> CRUD de Usuarios', () => {
   test('Se espera recibir un 200 por darle de baja a un usuario proporcionando un código de usuario correcto', async () => {
     const response = await request(app)
       .delete('/api/user/bryan_solares')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
     expect(response.body.message).toEqual('User deleted successfully')
@@ -122,7 +131,7 @@ describe('/API/USER -> CRUD de Usuarios', () => {
   test('Se espera recibir un 404 por darle de baja a un usuario que no existe', async () => {
     const response = await request(app)
       .delete('/api/user/bryan_solares_')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     expect(response.body.message).toEqual('User not found on database')
@@ -131,19 +140,19 @@ describe('/API/USER -> CRUD de Usuarios', () => {
   test('Se espera que la petión se existosa y que almenos se devuelva un valor', async () => {
     const response = await request(app)
       .get('/api/user')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
     expect(response.body.data.users).toHaveLength(1)
   })
 
   test('Se espera un 200 y que devuelva los datos del usuario solicitado', async () => {
-    await destroyUser('bryan_solares')
-    await request(app).post('/api/user').send(dataNewUser).set('Authorization', data.token)
+    await userService.destroyUser('bryan_solares')
+    await userService.createUser(dataNewUser)
 
     const response = await request(app)
       .get('/api/user/bryan_solares')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
     const { user } = response.body
@@ -151,14 +160,12 @@ describe('/API/USER -> CRUD de Usuarios', () => {
   })
 })
 
-describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
+describe('FILES USER ADMINISTRATION', () => {
   //TODO: solucionar por HandlerError personalizado
   test('Se espera un 400 por no enviar un archivo adjunto', async () => {
-    await destroyUser('bryan_solares')
-    await request(app).post('/api/user').send(dataNewUser).set('Authorization', data.token)
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
     const messageError = response.body.errors.find((err) => err.param === 'file')
@@ -170,7 +177,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')
       .attach('profile', path.join(__dirname, '/resource/test.mp3'))
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .timeout(5000)
       .expect('Content-Type', /application\/json/)
       .expect(500)
@@ -182,7 +189,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')
       .attach('profile', path.join(__dirname, '/resource/test.png'))
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .timeout(5000)
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -195,7 +202,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
     const response = await request(app)
       .post('/api/user/upload/anywhere')
       .attach('profile', path.join(__dirname, '/resource/test.png'))
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     expect(response.body.message).toEqual('User not found on database')
@@ -204,7 +211,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
   test('Se espera la dirección URL de la imagen relacionada al perfil', async () => {
     const response = await request(app)
       .get('/api/user/upload/bryan_solares')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
     expect(response.body.image).toContain('profiles/profile_bryan_solares')
@@ -213,7 +220,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
   test('Se espera un 400 por buscar la imagen de un usuario no existente', async () => {
     const response = await request(app)
       .get('/api/user/upload/anywhere')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     expect(response.body.message).toEqual('User not found on database')
@@ -222,7 +229,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
   test('Se espera recibir un 404 por intentar eliminar imagen de un usuario no existente', async () => {
     const response = await request(app)
       .delete('/api/user/upload/anywhere')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(404)
     const { message } = response.body
@@ -232,7 +239,7 @@ describe('/API/USER/UPLOAD -> Imagen para perfil de usuario', () => {
   test('Se espera recibir link de image "Sin Imagen" por eliminar imagen de perfil', async () => {
     const response = await request(app)
       .delete('/api/user/upload/bryan_solares')
-      .set('Authorization', data.token)
+      .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(200)
     const { message, image } = response.body

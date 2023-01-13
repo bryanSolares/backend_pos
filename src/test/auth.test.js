@@ -1,12 +1,11 @@
 const request = require('supertest')
-const { app, data } = require('./helpers/helper')
-const { destroyUser, deleteUser } = require('../app/services/user.service')
+const { app, data, userService } = require('./helpers/helper')
 
-const validUser = { username: 'generico', password: 'generico' }
+const validUser = { username: data.fakeUserInitial.cod_user, password: data.fakeUserInitial.password }
 const invalidUser = { username: 'generico_', password: 'generico_' }
-const invalidPasswordUser = { username: 'generico', password: 'generico_' }
+const invalidPasswordUser = { username: data.fakeUserInitial.cod_user, password: 'generico_' }
 
-describe('/api/auth/login', () => {
+describe('AUTH ADMINISTRATION', () => {
   test('Recibe un 200 y un token en la respuesta', async () => {
     const response = await request(app)
       .post('/api/auth/login')
@@ -48,7 +47,7 @@ describe('/api/auth/login', () => {
   })
 })
 
-describe('/api/auth/token', () => {
+describe('TOKEN ADMINISTRATION', () => {
   test('Recibe un 200 por renovación de token con token antiguo válido', async () => {
     const {
       body: { token }
@@ -76,28 +75,23 @@ describe('/api/auth/token', () => {
       .expect(500)
   })
   test('Recibe un 400 por enviar un token de usuario ya no existente en base de datos', async () => {
-    await destroyUser('bryan_solares')
-    await request(app)
-      .post('/api/user')
-      .send({
-        cod_user: 'bryan_solares',
-        password: '12345',
-        name: 'Bryan Josué',
-        lastname: 'Solares',
-        email: 'solares.josue@outlook.com',
-        phone: '+502 4557-3001'
-      })
-      .set('Authorization', data.token)
+    await userService.createUser({
+      cod_user: '-',
+      password: '12345',
+      name: '-',
+      lastname: '-',
+      email: 'a@a.com',
+      phone: '+502 4557-3001'
+    })
 
-    const requestToken = await request(app)
-      .post('/api/auth/login')
-      .send({ username: 'bryan_solares', password: '12345' })
+    const { body } = await request(app).post('/api/auth/login').send({ username: '-', password: '12345' })
+    const token = body.token
 
-    await deleteUser('bryan_solares')
+    await userService.destroyUser('-')
 
     const response = await request(app)
       .post('/api/auth/token')
-      .set('Authorization', `Bearer ${requestToken.body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /application\/json/)
       .expect(400)
     expect(response.body.message).toEqual('User asigned of this token not found')

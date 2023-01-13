@@ -1,5 +1,4 @@
-const userService = require('../services/user.service')
-const { encryptPassword } = require('../utils/user.utils')
+const userService = require('../services/user')
 const { optionsProfilePhotoUpload } = require('../../config/cloudinary')
 const uploadService = require('../services/upload.service')
 
@@ -9,14 +8,14 @@ const createUser = async (req, res) => {
   try {
     const userExists = await userService.getUser(userData.cod_user)
     if (userExists) return res.status(400).json({ message: 'User already, please try new cod_user' })
-    const passwordEncrypted = await encryptPassword(userData.password)
-    const userSaved = { ...userData, password: passwordEncrypted }
-    const userCreated = await userService.createUser(userSaved)
-
-    res.status(201).json({ message: 'User created successfully', user: userCreated })
+    const { status, image, cod_user, name, lastname, email, phone } = await userService.createUser(userData)
+    res
+      .status(201)
+      .json({ message: 'User created successfully', user: { cod_user, name, lastname, email, phone, status, image } })
   } catch (error) {
+    console.log(error)
     //TODO: Error personalizado
-    res.status(400).json({ message: 'Error on create user', error: error })
+    res.status(500).json({ message: 'Error on create user', error: error })
   }
 }
 
@@ -26,12 +25,7 @@ const updateUser = async (req, res) => {
   try {
     const userExists = await userService.getUser(id)
     if (!userExists) return res.status(404).json({ message: 'User not found on database' })
-    if (userData.password) {
-      let newPassword = await encryptPassword(userData.password)
-      userData.password = newPassword
-    }
     await userService.updateUser(id, userData)
-
     res.status(200).json({ message: 'User updated successfully' })
   } catch (error) {
     //TODO: Error personalizado
@@ -59,7 +53,7 @@ const getUser = async (req, res) => {
   const idUser = req.params.id
 
   try {
-    const user = await userService.getUser(idUser)
+    const user = await userService.getUser(idUser, ['password', 'deleted', 'createdAt', 'updatedAt'])
     res.status(200).json({ message: '_', user })
   } catch (error) {
     //TODO: Error personalizado
@@ -74,7 +68,7 @@ const getAllUsers = async (req, res) => {
       return res.status(404).json({ message: 'The query limit or page is not valid' })
     }
 
-    const dataUsers = await userService.getAllUsers(page, limit)
+    const dataUsers = await userService.getAllUsers(page, limit, ['password', 'deleted', 'createdAt', 'updatedAt'])
     res.status(200).json({ message: '_', data: dataUsers })
   } catch (error) {
     //TODO: Error personalizado

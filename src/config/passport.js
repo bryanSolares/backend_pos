@@ -5,7 +5,7 @@ const passport = require('passport')
 const JwtStrategy = require('passport-jwt').Strategy
 const { JWT_PUBLIC_KEY } = require('./dotenv')
 const { JWT_ALGORITHM } = require('./dotenv')
-const { getUser } = require('../app/services/user.service')
+const { getUser } = require('../app/services/user')
 const authUtils = require('../app/utils/auth.utils')
 
 const tokenExtractor = (req) => {

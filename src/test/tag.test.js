@@ -1,10 +1,20 @@
 const request = require('supertest')
 const { app, tagService } = require('./helpers/helper')
 
+let token
+
+beforeAll(async () => {
+  const { body } = await request(app)
+    .post('/api/auth/login')
+    .send({ username: 'administrador', password: 'administrador' })
+  token = body.token
+})
+
 describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 201 por creación de una etiqueta', async () => {
     const response = await request(app)
       .post('/api/tag')
+      .set({ Authorization: token })
       .send({
         name: 'tag'
       })
@@ -30,6 +40,7 @@ describe('TAG ADMINISTRATION', () => {
         cod_tag: '123',
         name: 'tag'
       })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
@@ -42,6 +53,7 @@ describe('TAG ADMINISTRATION', () => {
     const response = await request(app)
       .post('/api/tag')
       .send({})
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
@@ -57,6 +69,7 @@ describe('TAG ADMINISTRATION', () => {
     const response = await request(app)
       .patch('/api/tag/123')
       .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -68,6 +81,7 @@ describe('TAG ADMINISTRATION', () => {
     const response = await request(app)
       .patch('/api/tag/abc123')
       .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
@@ -78,6 +92,7 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 200 al eliminar una etiqueta correctamente', async () => {
     const response = await request(app)
       .delete('/api/tag/123')
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -88,6 +103,7 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 400 al eliminar una etiqueta no existente', async () => {
     const response = await request(app)
       .delete('/api/tag/123abc')
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
@@ -101,6 +117,7 @@ describe('TAG ADMINISTRATION', () => {
 
     const response = await request(app)
       .get('/api/tag/123')
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -112,6 +129,7 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 200 y un null por buscar una etiqueta no existente', async () => {
     const response = await request(app)
       .get('/api/tag/1234abc')
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -123,6 +141,7 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 200 y devolver al menos un valor', async () => {
     const response = await request(app)
       .get('/api/tag')
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -134,6 +153,7 @@ describe('TAG ADMINISTRATION', () => {
     const response = await request(app)
       .get('/api/tag')
       .query({ limit: 1 })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -145,6 +165,7 @@ describe('TAG ADMINISTRATION', () => {
     const response = await request(app)
       .get('/api/tag')
       .query({ limit: 1, page: 100000 })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
@@ -157,12 +178,14 @@ describe('TAG ADMINISTRATION', () => {
     const responseOne = await request(app)
       .get('/api/tag')
       .query({ limit: 'abc', page: 'abc' })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
     const responseTwo = await request(app)
       .get('/api/tag')
       .query({ limit: -1, page: -1 })
+      .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 

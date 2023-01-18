@@ -3,6 +3,7 @@ const router = Router()
 const userRoutes = require('./user')
 const authRoutes = require('./auth.routes')
 const tagRoutes = require('./tag')
+const productRoutes = require('./product')
 
 router.get('/', (_, res) => {
   res.json({ message: 'Welcome to my api BACKEND POS' })
@@ -11,5 +12,6 @@ router.get('/', (_, res) => {
 router.use('/user', userRoutes)
 router.use('/auth', authRoutes)
 router.use('/tag', tagRoutes)
+router.use('/product', productRoutes)
 
 module.exports = router

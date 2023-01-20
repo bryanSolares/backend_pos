@@ -6,12 +6,12 @@ const createProduct = async (req, res) => {
     if (data.cod_product) {
       const productFinded = await service.getProduct(data.cod_product)
       if (productFinded)
-        return res.status(400).json({ message: 'El código que desea utilizar ya existe en la base de datos' })
+        return res.status(400).json({ message: 'El producto que desea crear ya existe en la base de datos' })
     }
 
     const { cod_product, name, description, status } = await service.createProduct(data)
     const product = { cod_product, name, description, status }
-    res.status(200).json({ message: 'Producto creado con éxito', product })
+    res.status(201).json({ message: 'Producto creado con éxito', product })
   } catch (error) {
     res.status(500).json({ message: 'Error on Server', error })
   }
@@ -23,7 +23,7 @@ const updateProduct = async (req, res) => {
   try {
     const productFinded = await service.getProduct(id)
     if (!productFinded || productFinded.deleted === true)
-      return res.status(200).json({ message: 'El producto a modificar no existe en la base de datos' })
+      return res.status(400).json({ message: 'El producto a modificar no existe en la base de datos' })
     await service.updateProduct(data, id)
     res.status(200).json({ message: 'Product has updated successfuly' })
   } catch (error) {
@@ -36,7 +36,7 @@ const deleteProduct = async (req, res) => {
   try {
     const productFinded = await service.getProduct(id)
     if (!productFinded || productFinded.deleted === true)
-      return res.status(200).json({ message: 'El producto a eliminar no existe en la base de datos' })
+      return res.status(400).json({ message: 'El producto a eliminar no existe en la base de datos' })
     await service.deleteProduct(id)
 
     res.status(200).json({ message: 'Product has deleted successfuly' })
@@ -49,7 +49,7 @@ const getProduct = async (req, res) => {
   const id = req.params.id
   try {
     const product = await service.getProduct(id, ['deleted', 'updatedAt', 'createdAt'])
-    res.status(200).json({ message: '-', data: product })
+    res.status(200).json({ message: '-', product })
   } catch (error) {
     res.status(500).json({ message: 'Error on Server', error })
   }

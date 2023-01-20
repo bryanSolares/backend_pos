@@ -12,7 +12,7 @@ router.post('/', requireAuth, validationOfCreateTag, validationHandle, controlle
 router.patch('/:id', requireAuth, validationOfUpdate, validationHandle, controller.updateProduct)
 router.delete('/:id', requireAuth, controller.deleteProduct)
 router.get('/:id', requireAuth, controller.getProduct)
-router.get('/', requireAuth, validationOfGetAllTags, controller.getProductList)
+router.get('/', requireAuth, validationOfGetAllTags, validationHandle, controller.getProductList)
 router.post('/:id', controller.uploadImages)
 
 module.exports = router

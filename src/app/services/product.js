@@ -16,7 +16,7 @@ const deleteProduct = async (id) => {
 }
 
 const destroyProduct = async (id) => {
-  return await productModel.destroy({ where: { cod_produt: id } })
+  return await productModel.destroy({ where: { cod_product: id } })
 }
 
 const getProduct = async (id, excludeFields) => {

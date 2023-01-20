@@ -2,8 +2,10 @@ const request = require('supertest')
 const app = require('../../app')
 const userModel = require('../../app/models/user.model')
 const tagModel = require('../../app/models/tag')
+const productModel = require('../../app/models/product')
 const userService = require('../../app/services/user')
 const tagService = require('../../app/services/tag')
+const productService = require('../../app/services/product')
 
 let token
 const fakeUserInitial = {
@@ -20,6 +22,7 @@ beforeAll(async () => {
   await app.listen()
   await userModel.destroy({ where: {}, truncate: true })
   await tagModel.destroy({ where: {}, truncate: true })
+  await productModel.destroy({ where: {}, truncate: true })
   await userService.createUser(fakeUserInitial)
 })
 
@@ -35,5 +38,6 @@ module.exports = {
     fakeUserInitial
   },
   userService,
-  tagService
+  tagService,
+  productService
 }

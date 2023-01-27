@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const userModel = require('../models/user.model')
+const userModel = require('../models/user')
 
 /**
  * Creación de usuario, se recibe el grupo de información previamente validada

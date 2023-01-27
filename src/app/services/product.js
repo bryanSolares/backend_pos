@@ -1,26 +1,26 @@
-const productModel = require('../models/product')
+const { Product } = require('../models')
 const utils = require('../utils/utils')
 
 const createProduct = async (data) => {
   let dataProduct = { ...data }
   if (!dataProduct.cod_product) dataProduct.cod_product = utils.createUUID()
-  return await productModel.create(dataProduct, { raw: true })
+  return await Product.create(dataProduct, { raw: true })
 }
 
 const updateProduct = async (data, id) => {
-  return await productModel.update(data, { where: { cod_product: id } })
+  return await Product.update(data, { where: { cod_product: id } })
 }
 
 const deleteProduct = async (id) => {
-  return await productModel.update({ deleted: true }, { where: { cod_product: id } })
+  return await Product.update({ deleted: true }, { where: { cod_product: id } })
 }
 
 const destroyProduct = async (id) => {
-  return await productModel.destroy({ where: { cod_product: id } })
+  return await Product.destroy({ where: { cod_product: id } })
 }
 
 const getProduct = async (id, excludeFields) => {
-  return productModel.findOne({
+  return Product.findOne({
     where: { cod_product: id, deleted: false },
     attributes: { exclude: excludeFields },
     raw: true
@@ -29,7 +29,7 @@ const getProduct = async (id, excludeFields) => {
 
 const getProducts = async (page = 1, limit = 10, excludeFields) => {
   const offset = parseInt((page - 1) * limit)
-  const { rows, count } = await productModel.findAndCountAll({
+  const { rows, count } = await Product.findAndCountAll({
     where: { deleted: false },
     raw: true,
     limit,

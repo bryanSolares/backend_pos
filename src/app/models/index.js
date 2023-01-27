@@ -1,0 +1,5 @@
+module.exports.Product = require('./product')
+module.exports.Tag = require('./tag')
+module.exports.ProductTags = require('./productTags')
+module.exports.User = require('./user')
+require('./associations')

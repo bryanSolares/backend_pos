@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const userRoutes = require('./user')
-const authRoutes = require('./auth.routes')
+const authRoutes = require('./auth')
 const tagRoutes = require('./tag')
 const productRoutes = require('./product')
 

@@ -1,6 +1,6 @@
 const userService = require('../services/user')
 const { optionsProfilePhotoUpload } = require('../../config/cloudinary')
-const uploadService = require('../services/upload.service')
+const uploadService = require('../services/upload')
 
 const createUser = async (req, res) => {
   const userData = req.body

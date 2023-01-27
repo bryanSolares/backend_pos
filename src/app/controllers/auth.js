@@ -1,5 +1,5 @@
 const userService = require('../services/user')
-const authUtils = require('../utils/auth.utils')
+const authUtils = require('../utils/auth')
 
 const login = async (req, res) => {
   const { username, password } = req.body

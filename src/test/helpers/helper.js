@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../../app')
-const userModel = require('../../app/models/user.model')
+const userModel = require('../../app/models/user')
 const tagModel = require('../../app/models/tag')
 const productModel = require('../../app/models/product')
 const userService = require('../../app/services/user')

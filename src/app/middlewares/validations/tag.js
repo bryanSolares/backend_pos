@@ -68,7 +68,7 @@ const validationOfUpdate = checkSchema({
   }
 })
 
-//TODO: Validar que el número sea mayor o igual a 1
+// TODO: Validar que el número sea mayor o igual a 1
 const validationOfGetAllTags = checkSchema({
   limit: { optional: true, notEmpty: true, isNumeric: { errorMessage: 'Value provided is not a number' } },
   page: { optional: true, notEmpty: true, isNumeric: { errorMessage: 'Value provided is not a number' } }

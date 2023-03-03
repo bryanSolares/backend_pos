@@ -33,7 +33,7 @@ describe('AUTH ADMINISTRATION', () => {
     expect(response.body.message).toEqual('User or password incorrect, try again')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Recibe un error 400 por falta de envío de username y password', async () => {
     const response = await request(app)
       .post('/api/auth/login')
@@ -66,11 +66,11 @@ describe('TOKEN ADMINISTRATION', () => {
       .expect(400)
     expect(response.body.message).toEqual('Token not exists in request')
   })
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Recibe un 400 por enviar un token que no es válido', async () => {
     const response = await request(app)
       .post('/api/auth/token')
-      .set('Authorization', `Bearer abc`)
+      .set('Authorization', 'Bearer abc')
       .expect('Content-Type', /application\/json/)
       .expect(500)
   })
@@ -85,7 +85,7 @@ describe('TOKEN ADMINISTRATION', () => {
     })
 
     const { body } = await request(app).post('/api/auth/login').send({ username: '-', password: '12345' })
-    const token = body.token
+    const { token } = body
 
     await userService.destroyUser('-')
 

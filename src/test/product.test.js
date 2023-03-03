@@ -2,7 +2,7 @@ const request = require('supertest')
 const { app, productService } = require('./helpers/helper')
 
 let token
-const url_base = '/api/product'
+const urlBase = '/api/product'
 
 beforeAll(async () => {
   const { body } = await request(app)
@@ -14,7 +14,7 @@ beforeAll(async () => {
 describe('PRODUCT ADMINISTRATION', () => {
   test('Deberá mostrar un 201 por creación de un producto', async () => {
     const response = await request(app)
-      .post(url_base)
+      .post(urlBase)
       .set({ Authorization: token })
       .send({
         name: 'producto'
@@ -36,7 +36,7 @@ describe('PRODUCT ADMINISTRATION', () => {
     await productService.createProduct({ cod_product: 123, name: 'product' })
 
     const response = await request(app)
-      .post(url_base)
+      .post(urlBase)
       .send({
         cod_product: '123',
         name: 'product'
@@ -49,10 +49,10 @@ describe('PRODUCT ADMINISTRATION', () => {
     expect(message).toEqual('El producto que desea crear ya existe en la base de datos')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Deberá mostrar un 400 por tratar de crear un producto sin nombre, body único obligatorio', async () => {
     const response = await request(app)
-      .post(url_base)
+      .post(urlBase)
       .send({})
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
@@ -68,7 +68,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 200 por modificar correctamente un producto', async () => {
     const response = await request(app)
-      .patch(`${url_base}/123`)
+      .patch(`${urlBase}/123`)
       .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
@@ -80,7 +80,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 400 al modificar un producto no existente', async () => {
     const response = await request(app)
-      .patch(`${url_base}/abc123`)
+      .patch(`${urlBase}/abc123`)
       .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
@@ -92,7 +92,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 200 al eliminar un producto correctamente', async () => {
     const response = await request(app)
-      .delete(`${url_base}/123`)
+      .delete(`${urlBase}/123`)
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -103,7 +103,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 400 al eliminar un producto no existente', async () => {
     const response = await request(app)
-      .delete(`${url_base}/123abc`)
+      .delete(`${urlBase}/123abc`)
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
@@ -117,19 +117,24 @@ describe('PRODUCT ADMINISTRATION', () => {
     await productService.createProduct({ cod_product: '123', name: 'product' })
 
     const response = await request(app)
-      .get(`${url_base}/123`)
+      .get(`${urlBase}/123`)
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
 
     const { product } = response.body
 
-    expect(product).toMatchObject({ cod_product: '123', name: 'product', description: null, status: true })
+    expect(product).toMatchObject({
+      cod_product: '123',
+      name: 'product',
+      description: null,
+      status: true
+    })
   })
 
   test('Deberá mostrar un 200 y un null por buscar un producto no existente', async () => {
     const response = await request(app)
-      .get(`${url_base}/abc123`)
+      .get(`${urlBase}/abc123`)
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -141,7 +146,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 200 y devolver al menos un valor', async () => {
     const response = await request(app)
-      .get(`${url_base}`)
+      .get(`${urlBase}`)
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -152,7 +157,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 200 y devolver al menos un valor al indicar la cantidad máxima de items a devolver', async () => {
     const response = await request(app)
-      .get(`${url_base}`)
+      .get(`${urlBase}`)
       .query({ limit: 1 })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
@@ -164,7 +169,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
   test('Deberá mostrar un 200 y no devolver nada por indicar un número de página no existente pero válida', async () => {
     const response = await request(app)
-      .get(`${url_base}`)
+      .get(`${urlBase}`)
       .query({ limit: 1, page: 100000 })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
@@ -174,17 +179,17 @@ describe('PRODUCT ADMINISTRATION', () => {
     expect(data.products.length).toBe(0)
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Deberá mostrar un 400 por intentar enviar un limit y page inválidos', async () => {
     const responseOne = await request(app)
-      .get(`${url_base}`)
+      .get(`${urlBase}`)
       .query({ limit: 'abc', page: 'abc' })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
     const responseTwo = await request(app)
-      .get(`${url_base}`)
+      .get(`${urlBase}`)
       .query({ limit: -1, page: -1 })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)

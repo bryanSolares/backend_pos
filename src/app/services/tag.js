@@ -8,7 +8,7 @@ const utils = require('../utils/utils')
  *
  */
 const createTag = async (tag) => {
-  let dataTag = { ...tag }
+  const dataTag = { ...tag }
   if (!dataTag.cod_tag) dataTag.cod_tag = utils.createUUID()
   return await tagModel.create(dataTag, { raw: true })
 }
@@ -20,9 +20,7 @@ const createTag = async (tag) => {
  * @returns {Promise<number>} Number of afected values
  *
  */
-const updateTag = async (id, tag) => {
-  return await tagModel.update(tag, { where: { cod_tag: id } })
-}
+const updateTag = async (id, tag) => await tagModel.update(tag, { where: { cod_tag: id } })
 
 /**
  *
@@ -33,9 +31,7 @@ const updateTag = async (id, tag) => {
  * @returns {Promise<number>} Number of afected values
  *
  */
-const deleteTag = async (id) => {
-  return await tagModel.update({ deleted: true }, { where: { cod_tag: id } })
-}
+const deleteTag = async (id) => await tagModel.update({ deleted: true }, { where: { cod_tag: id } })
 
 /**
  *
@@ -47,9 +43,7 @@ const deleteTag = async (id) => {
  * @returns {Promise<number>} Number of afected values
  *
  */
-const destroyTag = async (id) => {
-  return await tagModel.destroy({ where: { cod_tag: id } })
-}
+const destroyTag = async (id) => await tagModel.destroy({ where: { cod_tag: id } })
 
 /**
  *
@@ -62,9 +56,8 @@ const destroyTag = async (id) => {
  * @returns {Promise<JSON>} Tag searched
  *
  */
-const getTag = async (id, excludeFields) => {
-  return await tagModel.findOne({ where: { cod_tag: id }, raw: true, attributes: { exclude: excludeFields } })
-}
+const getTag = async (id, excludeFields) =>
+  await tagModel.findOne({ where: { cod_tag: id }, raw: true, attributes: { exclude: excludeFields } })
 
 /**
  *

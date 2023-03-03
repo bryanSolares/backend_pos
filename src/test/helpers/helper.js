@@ -21,10 +21,10 @@ const fakeUserInitial = {
 beforeAll(async () => {
   console.log('init beforeAll')
   await app.listen()
-  await User.destroy({ where: {} /*, truncate: true */ })
-  await ProductTags.destroy({ where: {} /*, truncate: true */ })
-  await Tag.destroy({ where: {} /*, truncate: true */ })
-  await Product.destroy({ where: {} /*, truncate: true */ })
+  await User.destroy({ where: {} /* , truncate: true */ })
+  await ProductTags.destroy({ where: {} /* , truncate: true */ })
+  await Tag.destroy({ where: {} /* , truncate: true */ })
+  await Product.destroy({ where: {} /* , truncate: true */ })
   await userService.createUser(fakeUserInitial)
 })
 

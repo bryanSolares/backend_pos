@@ -1,8 +1,8 @@
-FROM postgres:14.6-alpine
+FROM postgres:14.6-alpine as backend
 
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=POS
+ENV POSTGRES_USER={admin}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_DB=${POSTGRES_DB}
 
 COPY init.sql /docker-entrypoint-initdb.d
 

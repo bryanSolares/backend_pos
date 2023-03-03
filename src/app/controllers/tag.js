@@ -6,26 +6,33 @@ const createTag = async (req, res) => {
   try {
     if (data.cod_tag) {
       const tagFinded = await tagService.getTag(data.cod_tag)
-      if (tagFinded)
+      if (tagFinded) {
         return res.status(400).json({
           message: 'La categoria que desea crear ya existe en la base de datos, por favor indique otro código'
         })
+      }
     }
 
     const { cod_tag, name, description, status } = await tagService.createTag(data)
-    const tag = { cod_tag, name, description, status }
+    const tag = {
+      cod_tag,
+      name,
+      description,
+      status
+    }
     res.status(201).json({ message: 'Tag created on succesfully', tag })
   } catch (err) {
     res.status(500).json({ message: 'Error on create tag', err })
   }
 }
 const updateTag = async (req, res) => {
-  const id = req.params.id
+  const { id } = req.params
   const data = req.body
   try {
     const tagFinded = await tagService.getTag(id)
-    if (!tagFinded || tagFinded.deleted === true)
+    if (!tagFinded || tagFinded.deleted === true) {
       return res.status(400).json({ message: 'La categoría a modificar no existe en base de datos' })
+    }
     await tagService.updateTag(id, data)
 
     res.status(200).json({ message: 'Tag updated on succesfully' })
@@ -35,11 +42,12 @@ const updateTag = async (req, res) => {
 }
 
 const deleteTag = async (req, res) => {
-  const id = req.params.id
+  const { id } = req.params
   try {
     const tagFinded = await tagService.getTag(id)
-    if (!tagFinded || tagFinded.deleted === true)
+    if (!tagFinded || tagFinded.deleted === true) {
       return res.status(400).json({ message: 'La categoría a eliminar no existe en base de datos' })
+    }
     await tagService.deleteTag(id)
 
     res.status(200).json({ message: 'Tag deleted on succesfully' })
@@ -49,7 +57,7 @@ const deleteTag = async (req, res) => {
 }
 
 const getTag = async (req, res) => {
-  const id = req.params.id
+  const { id } = req.params
   try {
     const tagFinded = await tagService.getTag(id, ['deleted', 'createdAt', 'updatedAt'])
     // if (!tagFinded || tagFinded.deleted === true)

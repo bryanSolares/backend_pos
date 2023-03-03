@@ -23,7 +23,7 @@ const login = async (req, res) => {
 
 const renewToken = async (req, res) => {
   try {
-    const data = req.headers['authorization']
+    const data = req.headers.authorization
     if (!data) return res.status(400).json({ message: 'Token not exists in request' })
     const oldToken = authUtils.cleanToken(data)
     const payload = authUtils.dataTokenValid(oldToken)

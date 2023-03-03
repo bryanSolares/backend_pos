@@ -10,9 +10,10 @@ const { imageValidate } = require('../middlewares/image')
 const { validationHandle } = require('../utils/validate')
 require('../../config/passport')
 const passport = require('passport')
+
 const requireAuth = passport.authenticate('jwt', { session: false })
 
-router.post('/', requireAuth, newUser, validationHandle, userController.createUser)
+router.post('/', /* requireAuth, newUser, validationHandle, */ userController.createUser)
 
 router.patch('/:id', requireAuth, updateUser, validationHandle, userController.updateUser)
 

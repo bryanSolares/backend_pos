@@ -48,7 +48,7 @@ describe('TAG ADMINISTRATION', () => {
     expect(message).toEqual('La categoria que desea crear ya existe en la base de datos, por favor indique otro código')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Deberá mostrar un 400 por tratar de crear una etiqueta sin nombre, body único obligatorio', async () => {
     const response = await request(app)
       .post('/api/tag')
@@ -123,7 +123,12 @@ describe('TAG ADMINISTRATION', () => {
 
     const { tag } = response.body
 
-    expect(tag).toMatchObject({ cod_tag: '123', name: 'tag', description: null, status: true })
+    expect(tag).toMatchObject({
+      cod_tag: '123',
+      name: 'tag',
+      description: null,
+      status: true
+    })
   })
 
   test('Deberá mostrar un 200 y un null por buscar una etiqueta no existente', async () => {
@@ -173,7 +178,7 @@ describe('TAG ADMINISTRATION', () => {
     expect(data.tags.length).toBe(0)
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Deberá mostrar un 400 por intentar enviar un limit y page inválidos', async () => {
     const responseOne = await request(app)
       .get('/api/tag')

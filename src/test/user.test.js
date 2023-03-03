@@ -40,7 +40,7 @@ beforeAll(async () => {
 })
 
 describe('USER ADMINISTRATION', () => {
-  //TODO: Deberá devolver un json
+  // TODO: Deberá devolver un json
   test('Se espera un 401 por intentar hacer una acción sin envíar token', async () => {
     await request(app).post('/api/user').send(dataNewUser).expect(401)
   })
@@ -65,7 +65,7 @@ describe('USER ADMINISTRATION', () => {
     expect(response.body.message).toBe('User already, please try new cod_user')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Se espera recibir un error 400 por falta de parámetros obligatorio en la petición de creación y no cumplir con longitud de contraseña', async () => {
     const response = await request(app)
       .post('/api/user')
@@ -81,7 +81,7 @@ describe('USER ADMINISTRATION', () => {
 
   test('Se espera recibir un 404 por intentar modificar un usuario no existente en la base de datos', async () => {
     const response = await request(app)
-      .patch(`/api/user/anywhere`)
+      .patch('/api/user/anywhere')
       .send(dataUserForUpdate.data)
       .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
@@ -89,7 +89,7 @@ describe('USER ADMINISTRATION', () => {
     expect(response.body.message).toEqual('User not found on database')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Se espera recibir un 400 por intentar modificar un usuario con un grupo de datos no completo', async () => {
     const response = await request(app)
       .patch(`/api/user/${dataUserForUpdate.cod_user}`)
@@ -161,7 +161,7 @@ describe('USER ADMINISTRATION', () => {
 })
 
 describe('FILES USER ADMINISTRATION', () => {
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Se espera un 400 por no enviar un archivo adjunto', async () => {
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')
@@ -172,7 +172,7 @@ describe('FILES USER ADMINISTRATION', () => {
     expect(messageError.msg).toEqual('Invalid format to image, admits: jpg, jpeg, png, gif, bmp')
   })
 
-  //TODO: solucionar por HandlerError personalizado
+  // TODO: solucionar por HandlerError personalizado
   test('Se espera un 400 por enviar un adjunto que no es imagen', async () => {
     const response = await request(app)
       .post('/api/user/upload/bryan_solares')

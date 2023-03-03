@@ -1,8 +1,6 @@
 const uuid = require('uuid').v4
 
-const createUUID = () => {
-  return uuid()
-}
+const createUUID = () => uuid()
 
 module.exports = {
   createUUID

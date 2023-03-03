@@ -14,13 +14,12 @@ const createUser = async (data) => {
   return await userModel.create(userOfCreate, { raw: true })
 }
 
-const getUser = async (id, excludeToFields) => {
-  return userModel.findOne({
+const getUser = async (id, excludeToFields) =>
+  userModel.findOne({
     where: { cod_user: id, deleted: false },
     attributes: { exclude: excludeToFields },
     raw: true
   })
-}
 
 const getAllUsers = async (page = 1, limit = 10, excludeToFields) => {
   const offset = parseInt((page - 1) * limit)
@@ -38,7 +37,7 @@ const getAllUsers = async (page = 1, limit = 10, excludeToFields) => {
 }
 
 const updateUser = async (id, data) => {
-  let userOfUpdate = { ...data }
+  const userOfUpdate = { ...data }
 
   if (userOfUpdate.password) {
     userOfUpdate.password = await encryptPassword(userOfUpdate.password)
@@ -46,16 +45,10 @@ const updateUser = async (id, data) => {
 
   return userModel.update(userOfUpdate, { where: { cod_user: id } })
 }
-const deleteUser = async (id) => {
-  return userModel.update({ deleted: true }, { where: { cod_user: id } })
-}
-const updateImage = async (id, url) => {
-  return userModel.update({ image: url }, { where: { cod_user: id } })
-}
+const deleteUser = async (id) => userModel.update({ deleted: true }, { where: { cod_user: id } })
+const updateImage = async (id, url) => userModel.update({ image: url }, { where: { cod_user: id } })
 
-const getImage = async (id) => {
-  return userModel.findByPk(id, { attributes: ['image'] })
-}
+const getImage = async (id) => userModel.findByPk(id, { attributes: ['image'] })
 
 const deleteImage = async (id) => {
   const imageDefault = 'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
@@ -63,12 +56,10 @@ const deleteImage = async (id) => {
   return imageDefault
 }
 
-const destroyUser = async (id) => {
-  return userModel.destroy({ where: { cod_user: id } })
-}
+const destroyUser = async (id) => userModel.destroy({ where: { cod_user: id } })
 
-const encryptPassword = (password) => {
-  return new Promise((resolve, reject) => {
+const encryptPassword = (password) =>
+  new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (error, salt) => {
       if (error) reject(error)
       bcrypt.hash(password, salt, (error, hash) => {
@@ -77,14 +68,12 @@ const encryptPassword = (password) => {
       })
     })
   })
-}
 
-const comparePassword = (password, encryptedPassword) => {
-  return new Promise(async (resolve) => {
+const comparePassword = (password, encryptedPassword) =>
+  new Promise(async (resolve) => {
     const result = await bcrypt.compare(password, encryptedPassword)
     resolve(result)
   })
-}
 
 module.exports = {
   createUser,

@@ -24,20 +24,19 @@ app.use(morgan('dev'))
 
 app.use('/api', routes)
 
-const listen = () => {
-  return new Promise((resolve) => {
+const listen = () =>
+  new Promise((resolve) => {
     server = app.listen(PORT, async () => {
       console.log('Server online')
       console.log(`Server on port ${PORT}`)
       await sequelize.connectPostgresql()
-      //await sequelize.sequelize.sync({ force: true })
+      // await sequelize.sequelize.sync({ force: true })
       resolve()
     })
   })
-}
 
-const stop = () => {
-  return new Promise((resolve, reject) => {
+const stop = () =>
+  new Promise((resolve, reject) => {
     if (server) {
       server.close((error) => {
         if (error) {
@@ -53,6 +52,10 @@ const stop = () => {
 
     resolve()
   })
-}
 
-module.exports = { listen, stop, server, app }
+module.exports = {
+  listen,
+  stop,
+  server,
+  app
+}

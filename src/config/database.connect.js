@@ -12,7 +12,12 @@ const sequelize = new Sequelize({
   database: POSTGRES_DB,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  pool: { min: 10, max: 100, idle: 30000, acquire: 60000 },
+  pool: {
+    min: 10,
+    max: 100,
+    idle: 30000,
+    acquire: 60000
+  },
   logging: true
 })
 
@@ -21,8 +26,8 @@ const connectPostgresql = async () => {
     await sequelize.authenticate()
     console.log('Database connection established')
   } catch (error) {
-    //TODO: Crear manejador de erress
-    console.log('Error on connection to database: ' + error)
+    // TODO: Crear manejador de erress
+    console.log(`Error on connection to database: ${error}`)
   }
 }
 

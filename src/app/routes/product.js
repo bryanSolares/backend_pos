@@ -6,6 +6,7 @@ const { validationOfGetAllTags } = require('../middlewares/validations/product')
 const { validationHandle } = require('../utils/validate')
 require('../../config/passport')
 const passport = require('passport')
+
 const requireAuth = passport.authenticate('jwt', { session: false })
 
 router.post('/', requireAuth, validationOfCreateTag, validationHandle, controller.createProduct)

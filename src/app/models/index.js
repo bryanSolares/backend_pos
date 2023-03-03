@@ -1,5 +1,12 @@
-module.exports.Product = require('./product')
-module.exports.Tag = require('./tag')
-module.exports.ProductTags = require('./productTags')
-module.exports.User = require('./user')
+const Product = require('./product')
+const Tag = require('./tag')
+const ProductTags = require('./productTags')
+const User = require('./user')
 require('./associations')
+
+module.exports = {
+  Product,
+  Tag,
+  ProductTags,
+  User
+}

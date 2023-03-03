@@ -6,7 +6,7 @@ const { getUser } = require('../app/services/user')
 const authUtils = require('../app/utils/auth')
 
 const tokenExtractor = (req) => {
-  const data = req.headers['authorization']
+  const data = req.headers.authorization
   return authUtils.cleanToken(data)
 }
 

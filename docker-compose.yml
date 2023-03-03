@@ -2,20 +2,20 @@ version: "3.8"
 
 services:
 
-  backend:
-    build:
-      context: .
-      dockerfile: backend.dockerfile
-    container_name: backend
-    restart: always
-    ports:
-      - 3999:3999
-    volumes:
-      - ./:/app
-    networks:
-      - netword_pos
-    depends_on:
-      - database
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: backend.dockerfile
+  #   container_name: backend
+  #   restart: always
+  #   ports:
+  #     - 3999:3999
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - netword_pos
+  #   depends_on:
+  #     - database
 
   database:
     build:
@@ -24,19 +24,19 @@ services:
     container_name: database
     restart: always
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=POS
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - 5432:5432
     volumes:
     - pgdata:/var/lib/postgresql/data
-    networks:
-      - netword_pos
+    # networks:
+    #   - netword_pos
 
 volumes:
   pgdata: {}
 
-networks:
-  netword_pos:
-    driver: bridge
+# networks:
+#   netword_pos:
+#     driver: bridge

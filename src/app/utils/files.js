@@ -2,11 +2,11 @@ const path = require('path')
 const multer = require('multer')
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, path.join(__dirname, '../../public/media'))
   },
-  filename: function (req, file, cb) {
-    const id = req.params.id
+  filename(req, file, cb) {
+    const { id } = req.params
     const extension = file.originalname.split('.').pop()
     cb(null, `profile_${id}.${extension}`)
   }

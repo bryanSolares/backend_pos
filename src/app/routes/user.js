@@ -13,7 +13,7 @@ const passport = require('passport')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 
-router.post('/', /* requireAuth, newUser, validationHandle, */ userController.createUser)
+router.post('/', requireAuth, newUser, validationHandle, userController.createUser)
 
 router.patch('/:id', requireAuth, updateUser, validationHandle, userController.updateUser)
 

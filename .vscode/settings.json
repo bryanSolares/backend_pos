@@ -1,3 +1,0 @@
-{
-  "conventionalCommits.scopes": ["lint_configure", "User", "Base_project", "core_project", "authenticate", "billing"]
-}

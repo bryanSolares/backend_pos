@@ -28,9 +28,11 @@ const updateProduct = async (req, res) => {
   const { id } = req.params
   try {
     const productFinded = await service.getProduct(id)
-    if (!productFinded || productFinded.deleted === true) {
+    console.log(productFinded)
+    if (productFinded.length === 0 || productFinded[0].deleted === true) {
       return res.status(400).json({ message: 'El producto a modificar no existe en la base de datos' })
     }
+
     await service.updateProduct(data, id)
     res.status(200).json({ message: 'Product has updated successfuly' })
   } catch (error) {
@@ -42,7 +44,7 @@ const deleteProduct = async (req, res) => {
   const { id } = req.params
   try {
     const productFinded = await service.getProduct(id)
-    if (!productFinded || productFinded.deleted === true) {
+    if (productFinded.length === 0 || productFinded[0].deleted === true) {
       return res.status(400).json({ message: 'El producto a eliminar no existe en la base de datos' })
     }
     await service.deleteProduct(id)

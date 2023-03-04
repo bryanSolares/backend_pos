@@ -124,7 +124,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
     const { product } = response.body
 
-    expect(product).toMatchObject({
+    expect(product[0]).toMatchObject({
       cod_product: '123',
       name: 'product',
       description: null,
@@ -132,7 +132,7 @@ describe('PRODUCT ADMINISTRATION', () => {
     })
   })
 
-  test('Deberá mostrar un 200 y un null por buscar un producto no existente', async () => {
+  test('Deberá mostrar un 200 y un arreglo vacio por buscar un producto no existente', async () => {
     const response = await request(app)
       .get(`${urlBase}/abc123`)
       .set({ Authorization: token })
@@ -141,7 +141,7 @@ describe('PRODUCT ADMINISTRATION', () => {
 
     const { product } = response.body
 
-    expect(product).toBeNull()
+    expect(product.length).toBe(0)
   })
 
   test('Deberá mostrar un 200 y devolver al menos un valor', async () => {

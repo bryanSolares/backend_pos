@@ -5,20 +5,26 @@ const utils = require('../utils/utils')
 
 // TODO: solucionar problema, creación de producto con inconveniente al momento de encontrar tag no existente
 const createProduct = async (data) => {
+  console.log(data)
   const dataProduct = { ...data }
   if (!dataProduct.cod_product) dataProduct.cod_product = utils.createUUID()
-
   const product = await Product.create(dataProduct, {})
-  await product.setTags(dataProduct.tags)
+  console.log('ok')
+  if (dataProduct.tags && dataProduct.tags.length !== 0) {
+    await product.setTags(dataProduct.tags)
+  }
   return product
 }
 
 // TODO: solucionar problema, edición de producto con inconveniente al momento de encontrar tag no existente
 const updateProduct = async (data, id) => {
   await Product.update(data, { where: { cod_product: id } })
-  await ProductTags.destroy({ where: { cod_product: id } })
-  const productTags = data.tags.map((tag) => ({ cod_product: id, cod_tag: tag }))
-  await ProductTags.bulkCreate(productTags, { validate: true })
+
+  if (data.tags && data.tags.length !== 0) {
+    await ProductTags.destroy({ where: { cod_product: id } })
+    const productTags = data.tags.map((tag) => ({ cod_product: id, cod_tag: tag }))
+    await ProductTags.bulkCreate(productTags, { validate: true })
+  }
   return {}
 }
 
@@ -35,7 +41,7 @@ const getProduct = async (id, excludeFields, include_tags = 0) => {
   })
 
   const productReturn = include_tags ? transformData(product) : product
-  return [productReturn]
+  return productReturn
 }
 
 const getProducts = async (page = 1, limit = 10, excludeFields, include_tags = 0) => {
@@ -61,13 +67,15 @@ const getProducts = async (page = 1, limit = 10, excludeFields, include_tags = 0
 const transformData = (data, unique = true) => {
   let returnData
   if (unique) {
-    returnData = {
-      cod_product: data[0]?.cod_product,
-      name: data[0]?.name,
-      description: data[0]?.description,
-      status: data[0]?.status,
-      tags: []
-    }
+    returnData = [
+      {
+        cod_product: data[0]?.cod_product,
+        name: data[0]?.name,
+        description: data[0]?.description,
+        status: data[0]?.status,
+        tags: []
+      }
+    ]
 
     returnData.tags = data.map((tag) => ({
       cod_tag: tag['tags.cod_tag'],

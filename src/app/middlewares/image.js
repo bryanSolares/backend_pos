@@ -8,9 +8,11 @@ const imageValidate = checkSchema({
   },
   file: {
     custom: {
-      options: (value, { req, location, path }) => {
+      options: (value, { req }) => {
         if (!req.file) {
-          throw new Error('Invalid format to image, admits: jpg, jpeg, png, gif, bmp')
+          throw new Error(
+            'Invalid format to image, admits: jpg, jpeg, png, gif, bmp'
+          )
         }
         return req.file
       }

@@ -1,5 +1,28 @@
+/* eslint camelcase: ["error", {properties: "never"}]*/
+
 const bcrypt = require('bcrypt')
 const userModel = require('../models/user')
+
+const encryptPassword = (password) =>
+  new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (error, salt) => {
+      if (error) {
+        reject(error)
+      }
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(hash)
+      })
+    })
+  })
+
+const comparePassword = (password, encryptedPassword) =>
+  new Promise(async (resolve) => {
+    const result = await bcrypt.compare(password, encryptedPassword)
+    resolve(result)
+  })
 
 /**
  * Creación de usuario, se recibe el grupo de información previamente validada
@@ -45,35 +68,21 @@ const updateUser = async (id, data) => {
 
   return userModel.update(userOfUpdate, { where: { cod_user: id } })
 }
-const deleteUser = async (id) => userModel.update({ deleted: true }, { where: { cod_user: id } })
-const updateImage = async (id, url) => userModel.update({ image: url }, { where: { cod_user: id } })
+const deleteUser = async (id) =>
+  userModel.update({ deleted: true }, { where: { cod_user: id } })
+const updateImage = async (id, url) =>
+  userModel.update({ image: url }, { where: { cod_user: id } })
 
 const getImage = async (id) => userModel.findByPk(id, { attributes: ['image'] })
 
 const deleteImage = async (id) => {
-  const imageDefault = 'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
+  const imageDefault =
+    'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
   userModel.update({ image: imageDefault }, { where: { cod_user: id } })
   return imageDefault
 }
 
 const destroyUser = async (id) => userModel.destroy({ where: { cod_user: id } })
-
-const encryptPassword = (password) =>
-  new Promise((resolve, reject) => {
-    bcrypt.genSalt(10, (error, salt) => {
-      if (error) reject(error)
-      bcrypt.hash(password, salt, (error, hash) => {
-        if (error) reject(error)
-        resolve(hash)
-      })
-    })
-  })
-
-const comparePassword = (password, encryptedPassword) =>
-  new Promise(async (resolve) => {
-    const result = await bcrypt.compare(password, encryptedPassword)
-    resolve(result)
-  })
 
 module.exports = {
   createUser,

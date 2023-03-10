@@ -5,7 +5,9 @@ const validationHandle = (req, res, next) => {
     validationResult(req).throw()
     return next()
   } catch (error) {
-    res.status(500).json({ message: 'validation error', errors: error.errors })
+    return res
+      .status(500)
+      .json({ message: 'validation error', errors: error.errors })
   }
 }
 

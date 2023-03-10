@@ -1,4 +1,6 @@
-const { check, checkSchema } = require('express-validator')
+/* eslint camelcase: ["error", {properties: "never"}]*/
+
+const { checkSchema } = require('express-validator')
 
 const newUser = checkSchema({
   cod_user: {
@@ -15,7 +17,10 @@ const newUser = checkSchema({
       errorMessage: 'Password must be a string',
       options: true
     },
-    isLength: { options: { min: 5 }, errorMessage: 'Password should be at least 5 chars long' },
+    isLength: {
+      options: { min: 5 },
+      errorMessage: 'Password should be at least 5 chars long'
+    },
     errorMessage: 'Please enter a password'
   },
   name: {
@@ -43,7 +48,8 @@ const newUser = checkSchema({
     notEmpty: true,
     errorMessage: 'Please enter a phone number',
     isLength: {
-      errorMessage: 'Phone should be at least minimum 14 characters and maximum 14 characters',
+      errorMessage:
+        'Phone should be at least minimum 14 characters and maximum 14 characters',
       options: { min: 14, max: 14 }
     },
     matches: {
@@ -69,7 +75,7 @@ const updateUser = checkSchema({
     in: ['body'],
     not: true,
     exists: {
-      errorMessage: "Can't you not change the cod user"
+      errorMessage: 'Can´t you not change the cod user'
     }
   },
   password: {
@@ -80,7 +86,10 @@ const updateUser = checkSchema({
       errorMessage: 'Password must be a string',
       options: true
     },
-    isLength: { options: { min: 5 }, errorMessage: 'Password should be at least 5 chars long' },
+    isLength: {
+      options: { min: 5 },
+      errorMessage: 'Password should be at least 5 chars long'
+    },
     errorMessage: 'Please enter a password'
   },
   name: {
@@ -108,7 +117,8 @@ const updateUser = checkSchema({
     notEmpty: true,
     errorMessage: 'Please enter a phone number',
     isLength: {
-      errorMessage: 'Phone should be at least minimum 14 characters and maximum 14 characters',
+      errorMessage:
+        'Phone should be at least minimum 14 characters and maximum 14 characters',
       options: { min: 14, max: 14 }
     },
     matches: {

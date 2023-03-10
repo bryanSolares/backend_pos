@@ -73,9 +73,15 @@ describe('USER ADMINISTRATION', () => {
       .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
-    const errorOfPassword = response.body.errors.find((err) => err.param === 'password')
-    const errorOfUserCode = response.body.errors.find((err) => err.param === 'cod_user')
-    expect(errorOfPassword.msg).toEqual('Password should be at least 5 chars long')
+    const errorOfPassword = response.body.errors.find(
+      (err) => err.param === 'password'
+    )
+    const errorOfUserCode = response.body.errors.find(
+      (err) => err.param === 'cod_user'
+    )
+    expect(errorOfPassword.msg).toEqual(
+      'Password should be at least 5 chars long'
+    )
     expect(errorOfUserCode.msg).toEqual('Please enter a user name')
   })
 
@@ -97,8 +103,12 @@ describe('USER ADMINISTRATION', () => {
       .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
-    const errorOfPassword = response.body.errors.find((err) => err.param === 'password')
-    expect(errorOfPassword.msg).toEqual('Password should be at least 5 chars long')
+    const errorOfPassword = response.body.errors.find(
+      (err) => err.param === 'password'
+    )
+    expect(errorOfPassword.msg).toEqual(
+      'Password should be at least 5 chars long'
+    )
   })
 
   test('Se espera recibir un 200 al intentar modificar a un usuario con datos correctos', async () => {
@@ -168,8 +178,12 @@ describe('FILES USER ADMINISTRATION', () => {
       .set('Authorization', token)
       .expect('Content-Type', /application\/json/)
       .expect(500)
-    const messageError = response.body.errors.find((err) => err.param === 'file')
-    expect(messageError.msg).toEqual('Invalid format to image, admits: jpg, jpeg, png, gif, bmp')
+    const messageError = response.body.errors.find(
+      (err) => err.param === 'file'
+    )
+    expect(messageError.msg).toEqual(
+      'Invalid format to image, admits: jpg, jpeg, png, gif, bmp'
+    )
   })
 
   // TODO: solucionar por HandlerError personalizado
@@ -181,8 +195,12 @@ describe('FILES USER ADMINISTRATION', () => {
       .timeout(5000)
       .expect('Content-Type', /application\/json/)
       .expect(500)
-    const messageError = response.body.errors.find((err) => err.param === 'file')
-    expect(messageError.msg).toEqual('Invalid format to image, admits: jpg, jpeg, png, gif, bmp')
+    const messageError = response.body.errors.find(
+      (err) => err.param === 'file'
+    )
+    expect(messageError.msg).toEqual(
+      'Invalid format to image, admits: jpg, jpeg, png, gif, bmp'
+    )
   })
 
   test('Se espera un 200 por carga de imagen exitosa', async () => {
@@ -244,6 +262,8 @@ describe('FILES USER ADMINISTRATION', () => {
       .expect(200)
     const { message, image } = response.body
     expect(message).toEqual('Image deleted successfully')
-    expect(image).toEqual('https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg')
+    expect(image).toEqual(
+      'https://res.cloudinary.com/dlsouq7fi/image/upload/v1672077611/profiles/not_image_hj9bk3.jpg'
+    )
   })
 })

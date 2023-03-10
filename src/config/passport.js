@@ -20,7 +20,9 @@ const verifyAutenticToken = (payload, done) => {
   const { sub } = payload
   getUser(sub)
     .then((user) => {
-      if (!user) return done(null, false)
+      if (!user) {
+        return done(null, false)
+      }
       return done(null, { ...user })
     })
     .catch((error) => {

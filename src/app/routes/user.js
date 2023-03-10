@@ -13,15 +13,33 @@ const passport = require('passport')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 
-router.post('/', requireAuth, newUser, validationHandle, userController.createUser)
+router.post(
+  '/',
+  requireAuth,
+  newUser,
+  validationHandle,
+  userController.createUser
+)
 
-router.patch('/:id', requireAuth, updateUser, validationHandle, userController.updateUser)
+router.patch(
+  '/:id',
+  requireAuth,
+  updateUser,
+  validationHandle,
+  userController.updateUser
+)
 
 router.get('/:id', requireAuth, userController.getUser)
 
 router.get('/', requireAuth, userController.getAllUsers)
 
-router.delete('/:id', requireAuth, deleteUser, validationHandle, userController.deleteUser)
+router.delete(
+  '/:id',
+  requireAuth,
+  deleteUser,
+  validationHandle,
+  userController.deleteUser
+)
 
 router.post(
   '/upload/:id',
@@ -32,8 +50,20 @@ router.post(
   userController.loadImageProfile
 )
 
-router.get('/upload/:id', requireAuth, getImage, validationHandle, userController.getImageProfile)
+router.get(
+  '/upload/:id',
+  requireAuth,
+  getImage,
+  validationHandle,
+  userController.getImageProfile
+)
 
-router.delete('/upload/:id', requireAuth, deleteImage, validationHandle, userController.deleteImageProfile)
+router.delete(
+  '/upload/:id',
+  requireAuth,
+  deleteImage,
+  validationHandle,
+  userController.deleteImageProfile
+)
 
 module.exports = router

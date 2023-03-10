@@ -2,8 +2,14 @@ const path = require('path')
 const fs = require('fs')
 require('dotenv').config({ path: path.join(__dirname, '../../.env') })
 
-const privateKey = fs.readFileSync(path.join(__dirname, './jwt/private.key'), 'utf-8')
-const publicKey = fs.readFileSync(path.join(__dirname, './jwt/private.key.pub'), 'utf-8')
+const privateKey = fs.readFileSync(
+  path.join(__dirname, './jwt/private.key'),
+  'utf-8'
+)
+const publicKey = fs.readFileSync(
+  path.join(__dirname, './jwt/private.key.pub'),
+  'utf-8'
+)
 
 module.exports = {
   PORT: process.env.PORT || 3000,

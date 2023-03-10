@@ -1,3 +1,4 @@
+/* eslint camelcase: "off" */
 const cloudinary = require('cloudinary').v2
 const { CLOUD_NAME } = require('./dotenv')
 const { CLOUD_APIKEY } = require('./dotenv')

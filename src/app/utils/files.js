@@ -1,3 +1,4 @@
+/* eslint consistent-return: "off" */
 const path = require('path')
 const multer = require('multer')
 
@@ -15,8 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fieldSize: 8000000 },
-  fileFilter: (req, file, cb) => {
-    console.log(file)
+  fileFilter: (_, file, cb) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif|bmp)$/)) {
       return cb(null, false)
     }

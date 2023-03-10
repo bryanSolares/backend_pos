@@ -25,7 +25,9 @@ describe('PRODUCT ADMINISTRATION', () => {
     const { product } = response.body
 
     expect(product).toMatchObject({
-      cod_product: expect.stringMatching(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i),
+      cod_product: expect.stringMatching(
+        /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      ),
       name: 'producto',
       description: null,
       status: /true|false/
@@ -46,7 +48,9 @@ describe('PRODUCT ADMINISTRATION', () => {
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('El producto que desea crear ya existe en la base de datos')
+    expect(message).toEqual(
+      'El producto que desea crear ya existe en la base de datos'
+    )
   })
 
   // TODO: solucionar por HandlerError personalizado
@@ -58,7 +62,9 @@ describe('PRODUCT ADMINISTRATION', () => {
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
-    const messageErrorName = response.body.errors.find((err) => err.param === 'name')
+    const messageErrorName = response.body.errors.find(
+      (err) => err.param === 'name'
+    )
     expect(messageErrorName).toMatchObject({
       msg: 'Should provide value of this param',
       param: 'name',
@@ -69,7 +75,11 @@ describe('PRODUCT ADMINISTRATION', () => {
   test('Deberá mostrar un 200 por modificar correctamente un producto', async () => {
     const response = await request(app)
       .patch(`${urlBase}/123`)
-      .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .send({
+        name: 'Nombre modificado',
+        description: 'Descripción Modificada',
+        status: false
+      })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -81,13 +91,19 @@ describe('PRODUCT ADMINISTRATION', () => {
   test('Deberá mostrar un 400 al modificar un producto no existente', async () => {
     const response = await request(app)
       .patch(`${urlBase}/abc123`)
-      .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .send({
+        name: 'Nombre modificado',
+        description: 'Descripción Modificada',
+        status: false
+      })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('El producto a modificar no existe en la base de datos')
+    expect(message).toEqual(
+      'El producto a modificar no existe en la base de datos'
+    )
   })
 
   test('Deberá mostrar un 200 al eliminar un producto correctamente', async () => {
@@ -109,7 +125,9 @@ describe('PRODUCT ADMINISTRATION', () => {
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('El producto a eliminar no existe en la base de datos')
+    expect(message).toEqual(
+      'El producto a eliminar no existe en la base de datos'
+    )
   })
 
   test('Deberá mostrar un 200 y un JSON con el producto solicitado', async () => {
@@ -195,8 +213,12 @@ describe('PRODUCT ADMINISTRATION', () => {
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
-    const messageErrorLimit = responseOne.body.errors.find((err) => err.param === 'limit')
-    const messageErrorPage = responseOne.body.errors.find((err) => err.param === 'page')
+    const messageErrorLimit = responseOne.body.errors.find(
+      (err) => err.param === 'limit'
+    )
+    const messageErrorPage = responseOne.body.errors.find(
+      (err) => err.param === 'page'
+    )
     const { message } = responseTwo.body
 
     expect(message).toEqual('The query limit or page is not valid')

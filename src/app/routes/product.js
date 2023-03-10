@@ -9,11 +9,28 @@ const passport = require('passport')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 
-router.post('/', requireAuth, validationOfCreateTag, validationHandle, controller.createProduct)
-router.patch('/:id', requireAuth, validationOfUpdate, validationHandle, controller.updateProduct)
+router.post(
+  '/',
+  requireAuth,
+  validationOfCreateTag,
+  validationHandle,
+  controller.createProduct
+)
+router.patch(
+  '/:id',
+  requireAuth,
+  validationOfUpdate,
+  validationHandle,
+  controller.updateProduct
+)
 router.delete('/:id', requireAuth, controller.deleteProduct)
 router.get('/:id', requireAuth, controller.getProduct)
-router.get('/', requireAuth, validationOfGetAllTags, validationHandle, controller.getProductList)
-router.post('/:id', controller.uploadImages)
+router.get(
+  '/',
+  requireAuth,
+  validationOfGetAllTags,
+  validationHandle,
+  controller.getProductList
+)
 
 module.exports = router

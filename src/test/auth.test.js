@@ -1,9 +1,15 @@
 const request = require('supertest')
 const { app, data, userService } = require('./helpers/helper')
 
-const validUser = { username: data.fakeUserInitial.cod_user, password: data.fakeUserInitial.password }
+const validUser = {
+  username: data.fakeUserInitial.cod_user,
+  password: data.fakeUserInitial.password
+}
 const invalidUser = { username: 'generico_', password: 'generico_' }
-const invalidPasswordUser = { username: data.fakeUserInitial.cod_user, password: 'generico_' }
+const invalidPasswordUser = {
+  username: data.fakeUserInitial.cod_user,
+  password: 'generico_'
+}
 
 describe('AUTH ADMINISTRATION', () => {
   test('Recibe un 200 y un token en la respuesta', async () => {
@@ -12,7 +18,9 @@ describe('AUTH ADMINISTRATION', () => {
       .send(validUser)
       .expect('Content-Type', /application\/json/)
       .expect(200)
-    expect(response.body.token).toMatch(/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]*$/)
+    expect(response.body.token).toMatch(
+      /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]*$/
+    )
   })
 
   test('Recibe un 404 por envio de usuario no existente', async () => {
@@ -30,7 +38,9 @@ describe('AUTH ADMINISTRATION', () => {
       .send(invalidPasswordUser)
       .expect('Content-Type', /application\/json/)
       .expect(401)
-    expect(response.body.message).toEqual('User or password incorrect, try again')
+    expect(response.body.message).toEqual(
+      'User or password incorrect, try again'
+    )
   })
 
   // TODO: solucionar por HandlerError personalizado
@@ -40,10 +50,22 @@ describe('AUTH ADMINISTRATION', () => {
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
-    const messageErrorPassword = response.body.errors.find((err) => err.param === 'password')
-    const messageErrorUsername = response.body.errors.find((err) => err.param === 'username')
-    expect(messageErrorPassword).toMatchObject({ msg: 'Please enter a password', param: 'password', location: 'body' })
-    expect(messageErrorUsername).toMatchObject({ msg: 'Please enter a username', param: 'username', location: 'body' })
+    const messageErrorPassword = response.body.errors.find(
+      (err) => err.param === 'password'
+    )
+    const messageErrorUsername = response.body.errors.find(
+      (err) => err.param === 'username'
+    )
+    expect(messageErrorPassword).toMatchObject({
+      msg: 'Please enter a password',
+      param: 'password',
+      location: 'body'
+    })
+    expect(messageErrorUsername).toMatchObject({
+      msg: 'Please enter a username',
+      param: 'username',
+      location: 'body'
+    })
   })
 })
 
@@ -57,7 +79,9 @@ describe('TOKEN ADMINISTRATION', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /application\/json/)
       .expect(200)
-    expect(response.body.token).toMatch(/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]*$/)
+    expect(response.body.token).toMatch(
+      /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]*$/
+    )
   })
   test('Recibe un 400 por no enviar token en petición', async () => {
     const response = await request(app)
@@ -84,7 +108,9 @@ describe('TOKEN ADMINISTRATION', () => {
       phone: '+502 4557-3001'
     })
 
-    const { body } = await request(app).post('/api/auth/login').send({ username: '-', password: '12345' })
+    const { body } = await request(app)
+      .post('/api/auth/login')
+      .send({ username: '-', password: '12345' })
     const { token } = body
 
     await userService.destroyUser('-')
@@ -94,6 +120,8 @@ describe('TOKEN ADMINISTRATION', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /application\/json/)
       .expect(400)
-    expect(response.body.message).toEqual('User asigned of this token not found')
+    expect(response.body.message).toEqual(
+      'User asigned of this token not found'
+    )
   })
 })

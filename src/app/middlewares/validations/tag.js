@@ -1,3 +1,5 @@
+/* eslint camelcase: ["error", {properties: "never"}]*/
+
 const { checkSchema } = require('express-validator')
 
 const validationOfCreateTag = checkSchema({
@@ -70,8 +72,16 @@ const validationOfUpdate = checkSchema({
 
 // TODO: Validar que el número sea mayor o igual a 1
 const validationOfGetAllTags = checkSchema({
-  limit: { optional: true, notEmpty: true, isNumeric: { errorMessage: 'Value provided is not a number' } },
-  page: { optional: true, notEmpty: true, isNumeric: { errorMessage: 'Value provided is not a number' } }
+  limit: {
+    optional: true,
+    notEmpty: true,
+    isNumeric: { errorMessage: 'Value provided is not a number' }
+  },
+  page: {
+    optional: true,
+    notEmpty: true,
+    isNumeric: { errorMessage: 'Value provided is not a number' }
+  }
 })
 
 module.exports = {

@@ -24,7 +24,9 @@ describe('TAG ADMINISTRATION', () => {
     const { tag } = response.body
 
     expect(tag).toMatchObject({
-      cod_tag: expect.stringMatching(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i),
+      cod_tag: expect.stringMatching(
+        /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      ),
       name: 'tag',
       description: null,
       status: /true|false/
@@ -45,7 +47,9 @@ describe('TAG ADMINISTRATION', () => {
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('La categoria que desea crear ya existe en la base de datos, por favor indique otro código')
+    expect(message).toEqual(
+      'La categoria que desea crear ya existe en la base de datos, por favor indique otro código'
+    )
   })
 
   // TODO: solucionar por HandlerError personalizado
@@ -57,7 +61,9 @@ describe('TAG ADMINISTRATION', () => {
       .expect('Content-Type', /application\/json/)
       .expect(500)
 
-    const messageErrorName = response.body.errors.find((err) => err.param === 'name')
+    const messageErrorName = response.body.errors.find(
+      (err) => err.param === 'name'
+    )
     expect(messageErrorName).toMatchObject({
       msg: 'Should provide value of this param',
       param: 'name',
@@ -68,7 +74,11 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 200 por modificar correctamente una etiqueta', async () => {
     const response = await request(app)
       .patch('/api/tag/123')
-      .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .send({
+        name: 'Nombre modificado',
+        description: 'Descripción Modificada',
+        status: false
+      })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(200)
@@ -80,13 +90,19 @@ describe('TAG ADMINISTRATION', () => {
   test('Deberá mostrar un 400 al modificar una etiqueta no existente', async () => {
     const response = await request(app)
       .patch('/api/tag/abc123')
-      .send({ name: 'Nombre modificado', description: 'Descripción Modificada', status: false })
+      .send({
+        name: 'Nombre modificado',
+        description: 'Descripción Modificada',
+        status: false
+      })
       .set({ Authorization: token })
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('La categoría a modificar no existe en base de datos')
+    expect(message).toEqual(
+      'La categoría a modificar no existe en base de datos'
+    )
   })
 
   test('Deberá mostrar un 200 al eliminar una etiqueta correctamente', async () => {
@@ -108,7 +124,9 @@ describe('TAG ADMINISTRATION', () => {
       .expect(400)
 
     const { message } = response.body
-    expect(message).toEqual('La categoría a eliminar no existe en base de datos')
+    expect(message).toEqual(
+      'La categoría a eliminar no existe en base de datos'
+    )
   })
 
   test('Deberá mostrar un 200 y un JSON con la etiqueta solicitada', async () => {
@@ -194,8 +212,12 @@ describe('TAG ADMINISTRATION', () => {
       .expect('Content-Type', /application\/json/)
       .expect(400)
 
-    const messageErrorLimit = responseOne.body.errors.find((err) => err.param === 'limit')
-    const messageErrorPage = responseOne.body.errors.find((err) => err.param === 'page')
+    const messageErrorLimit = responseOne.body.errors.find(
+      (err) => err.param === 'limit'
+    )
+    const messageErrorPage = responseOne.body.errors.find(
+      (err) => err.param === 'page'
+    )
     const { message } = responseTwo.body
 
     expect(message).toEqual('The query limit or page is not valid')

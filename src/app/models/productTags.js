@@ -1,3 +1,5 @@
+/* eslint camelcase: ["error", {properties: "never"}]*/
+
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../../config/database.connect')
 const Product = require('./product')
